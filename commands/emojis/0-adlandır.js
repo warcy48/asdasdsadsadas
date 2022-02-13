@@ -1,0 +1,67 @@
+const Discord = require('discord.js');
+exports.run = async (client, message, args) => {
+	 let p = args[0];
+  let prefix = await require('quick.db').fetch(`prefix_${message.guild.id}`) || `.`
+  let onlycode = args.slice(0).join(' ');
+if(!message.member.hasPermission('MANAGE_EMOJIS')) return;
+if(!args[0]) return message.channel.send(new Discord.MessageEmbed()
+.addField('Adlandır Komutu', "Emojilerin adını emojiyi göndererek veya sadece adını yazarak değiştirebilirsiniz.")
+.addField('Kullanım', `${prefix}adlandır <emojiadi> yeniad
+${prefix}adlandır :emoji: yeniad`)
+.addField('Örnekler', `${prefix}adlandır <karpuz> <superkarpuz>
+${prefix}adlandır :karpuz: superkarpuz`)
+.addField('Kısaltmalar', `${prefix}adlandir`)
+.setFooter(message.author.username+' tarafından istendi.', message.author.avatarURL({ dynamic: true })));
+if(!args[1]) return message.channel.send(new Discord.MessageEmbed()
+.addField('Adlandır Komutu', "Emojilerin adını emojiyi göndererek veya sadece adını yazarak değiştirebilirsiniz.")
+.addField('Kullanım', `${prefix}adlandır emojiadi yeniad
+${prefix}adlandır :emoji: yeniad`)
+.addField('Örnekler', `${prefix}adlandır karpuz superkarpuz
+${prefix}adlandır :karpuz: superkarpuz`)
+.addField('Kısaltmalar', `${prefix}adlandir`)
+.setFooter(message.author.username+' tarafından istendi.', message.author.avatarURL({ dynamic: true })));
+  const s = args[0].split(' ').filter(x => x.includes('<') && x.includes('>'))[0];
+  var emoji;
+  if(s) {
+  if(!message.guild.emojis.cache.get(s.split(':')[2].split('>')[0])) return message.channel.send(new Discord.MessageEmbed()
+  .addField('Adlandır Komutu', "Emojilerin adını emojiyi göndererek veya sadece adını yazarak değiştirebilirsiniz.")
+  .addField('Kullanım', `${prefix}adlandır emojiadi yeniad
+  ${prefix}adlandır :emoji: yeniad`)
+  .addField('Örnekler', `${prefix}adlandır karpuz superkarpuz
+  ${prefix}adlandır :karpuz: superkarpuz`)
+  .addField('Kısaltmalar', `${prefix}adlandir`)
+  .setFooter(message.author.username+' tarafından istendi.', message.author.avatarURL({ dynamic: true })));
+  emoji = message.guild.emojis.cache.get(s.split(':')[2].split('>')[0]);
+  } else {
+  if(!message.guild.emojis.cache.find(x => x.name === args[0])) return message.channel.send(new Discord.MessageEmbed()
+  .addField('Adlandır Komutu', "Emojilerin adını emojiyi göndererek veya sadece adını yazarak değiştirebilirsiniz.")
+  .addField('Kullanım', `${prefix}adlandır emojiadi yeniad
+  ${prefix}adlandır :emoji: yeniad`)
+  .addField('Örnekler', `${prefix}adlandır karpuz superkarpuz
+  ${prefix}adlandır :karpuz: superkarpuz`)
+  .addField('Kısaltmalar', `${prefix}adlandir`)
+  .setFooter(message.author.username+' tarafından istendi.', message.author.avatarURL({ dynamic: true })));
+  emoji = message.guild.emojis.cache.find(x => x.name === args[0]);
+  };
+  if(!emoji) return message.channel.send(new Discord.MessageEmbed()
+.addField('Adlandır Komutu', "Emojilerin adını emojiyi göndererek veya sadece adını yazarak değiştirebilirsiniz.")
+.addField('Kullanım', `${prefix}adlandır emojiadi yeniad
+${prefix}adlandır :emoji: yeniad`)
+.addField('Örnekler', `${prefix}adlandır karpuz superkarpuz
+${prefix}adlandır :karpuz: superkarpuz`)
+.addField('Kısaltmalar', `${prefix}adlandir`)
+.setFooter(message.author.username+' tarafından istendi.', message.author.avatarURL({ dynamic: true })));
+emoji.edit({ name: args.slice(1).join('${prefix}'), reason: 'Sorumlu moderatör: '+message.author.tag });
+return message.channel.send(`\`${emoji.name}\` emojisinin adı \`${args.slice(1).join('${prefix}')}\` olarak değiştirildi.`);
+}; 
+exports.conf = {
+  enabled: true,
+  guildOnly: false,
+  aliases: ['adlandir'],
+  permLevel: 2
+};
+ 
+exports.help = {
+  name: 'adlandır',
+  namee: 'rename'
+};
